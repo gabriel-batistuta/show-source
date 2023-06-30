@@ -1,27 +1,29 @@
+// const exec = require('child_process');
+// const exec = ChildProcess.exec()
+
 function getSource() {
-    url = document.querySelector("input.source-url")
-    output = document.querySelector("div.output-source")
+    const url = document.querySelector("input.source-url")
+    const output = document.querySelector("div.output-source")
     console.log(url)
 
+    const source = fetch(url).then(response => response.text()) 
     // source = fetch(`${url}`).then((response) => response.text());
-    // console.log(source)
-    fetch("view-source:" + url).then(
-        function(response) {
-            if (response.status !== 200) {
-                message = ('Looks like there was a problem. Status Code: ' +
-                response.status);
-                output.innerHTML = message
+    console.log(source)
 
-                return message;
-            }
+    const comandoPython = `python3 main.py ${url}`
 
-            source = response.text();
-            output.innerHTML = source
-        }
-    )
-  .catch(function(err) {
-    error = ('Fetch Error :-S', err);
-    output.innerHTML = error
-  });
+    // Executa o comando Python
+    exec(comandoPython, (erro, stdout, stderr) => {
+      if (erro) {
+        output.innerHTML = `${erro}`
+        console.error(`Erro ao executar o código Python: ${erro}`);
+        return;
+      }
+      
+      output.innerHTML = `${stdout}`
+      console.log(`Resposta: ${stdout}`);
+    });
 
 }
+
+getSource()
