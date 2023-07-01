@@ -16,15 +16,21 @@
         }
 
         main {
-            height: 20vh;
+            height: 10vh;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-evenly;
         }
 
-        input {
+        input.source-url {
             width: 700px;
             height: 20px;
+            border-radius: 3px;
+            border: 3px solid black;
+        }
+
+        input.submit {
+            padding-left: 5px;
             border-radius: 3px;
             border: 3px solid black;
         }
@@ -40,19 +46,42 @@
             text-align: justify;
         }
     </style>
-    <script src="main.js" defer></script>
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script> 
+    <!-- <script src="main.js" defer></script> -->
 </head>
 <body>
     <header>
         <h1>Digite sua URL:</h1>
     </header>
     <main>
-        <input type="text" name="source-url" id="source-url" onkeypress="getSource()" e.preventDefault();>
+        <input type="text" name="source-url" class="source-url">
+        <input type="button" value="Buscar" class="submit" py-click="getSource()">
     </main>
     <code>
         <div class="output-source">
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia quod error dolor expedita dicta ratione quidem nemo deserunt libero, suscipit omnis mollitia, nostrum impedit, ut officia. Atque enim ea obcaecati? Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates exercitationem error quisquam? Placeat adipisci eligendi numquam, sed distinctio, deserunt cupiditate magni fugiat atque delectus ratione. Quisquam facere molestias saepe atque. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellendus a perspiciatis non vero sapiente alias odio eos suscipit placeat officiis consequuntur repellat deserunt magni recusandae incidunt facilis, doloremque eaque cum.</p>
+            
         </div>
     </code>
+    <py-config>
+        packages = ["requests", "bs4", "js"]
+    </py-config>
+    <pyscript>
+        import req
+        import requests
+        from bs4 import BeautifulSoup
+        from js import document
+
+        def getSource():
+            req.getSource()
+            url = document.querySelector("input.source-url")
+            output = document.querySelector("div.output-source")
+        
+            htmlPage = requests.get(url).content
+            soup = BeautifulSoup(htmlPage, 'html.parser')
+            htmlPage = soup.prettify()
+            output.innerHTML = htmlPage
+
+    </pyscript>
 </body>
 </html>

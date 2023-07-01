@@ -1,29 +1,12 @@
-// const exec = require('child_process');
-// const exec = ChildProcess.exec()
-
-function getSource() {
+async function getSource(url) {
     const url = document.querySelector("input.source-url")
     const output = document.querySelector("div.output-source")
-    console.log(url)
-
-    const source = fetch(url).then(response => response.text()) 
-    // source = fetch(`${url}`).then((response) => response.text());
-    console.log(source)
-
-    const comandoPython = `python3 main.py ${url}`
-
-    // Executa o comando Python
-    exec(comandoPython, (erro, stdout, stderr) => {
-      if (erro) {
-        output.innerHTML = `${erro}`
-        console.error(`Erro ao executar o código Python: ${erro}`);
-        return;
-      }
-      
-      output.innerHTML = `${stdout}`
-      console.log(`Resposta: ${stdout}`);
-    });
-
+	let content = ""
+	fetch('https://www.exemplo.com').then(response => response.text()).then(data => {
+		// Atribuir o conteúdo a uma variável
+		content = data;
+		console.log(content); // O conteúdo da página será exibido no console
+	})
+	// output.innerHTML = `${response}`
 }
-
-getSource()
+getSource("https://www.freecodecamp.org/portuguese/news/o-guia-definitivo-para-web-scraping-com-node-js/")
